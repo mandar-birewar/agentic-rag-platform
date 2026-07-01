@@ -1,196 +1,333 @@
-# AI-Agent Platform
+# 🤖 Prodigy AI
 
-A production-grade, resume-worthy AI Agent Platform built from scratch in Python — capable of multi-tool orchestration, conversation memory, RAG, and multi-agent workflows.
+<div align="center">
 
----
+### Production-Ready Agentic AI Platform with RAG, Tool Calling & Conversation Memory
 
-## Architecture Overview
+*Built using React, FastAPI, Gemini 2.5 Flash, ChromaDB, and a modular Agent Architecture.*
 
-```
-User Query
-    │
-    ▼
-┌─────────────────────────────────────────┐
-│              FastAPI Layer              │  ← api/
-│    POST /chat  │  GET /health  etc.     │
-└────────────────┬────────────────────────┘
-                 │
-                 ▼
-┌─────────────────────────────────────────┐
-│              AI Agent Core              │  ← agent/
-│  • Decides if a tool is needed          │
-│  • Selects the right tool               │
-│  • Assembles final response             │
-└──────┬──────────────┬───────────────────┘
-       │              │
-       ▼              ▼
-┌────────────┐  ┌───────────────────────┐
-│ LLM Module │  │     Tool Registry     │  ← tools/
-│ (Gemini /  │  │  WeatherTool          │
-│  OpenAI)   │  │  NewsTool             │
-└────────────┘  │  CalculatorTool       │
-                │  TimeTool             │
-                │  DocumentTool (RAG)   │
-                └───────────────────────┘
-                         │
-                         ▼
-              ┌────────────────────┐
-              │   Memory Module    │  ← memory/
-              │  Conversation ctx  │
-              └────────────────────┘
-                         │
-                         ▼
-              ┌────────────────────┐
-              │  Vector DB (RAG)   │  ← ChromaDB
-              │  PDF → Chunks →    │
-              │  Embeddings →      │
-              │  Retriever         │
-              └────────────────────┘
-```
+![Python](https://img.shields.io/badge/Python-3.13-blue?style=for-the-badge\&logo=python)
+![FastAPI](https://img.shields.io/badge/FastAPI-Framework-009688?style=for-the-badge\&logo=fastapi)
+![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge\&logo=react)
+![Vite](https://img.shields.io/badge/Vite-Frontend-646CFF?style=for-the-badge\&logo=vite)
+![TailwindCSS](https://img.shields.io/badge/TailwindCSS-Styling-38B2AC?style=for-the-badge\&logo=tailwind-css)
+![Gemini](https://img.shields.io/badge/Google-Gemini_2.5_Flash-4285F4?style=for-the-badge\&logo=google)
+![ChromaDB](https://img.shields.io/badge/Vector-Database-orange?style=for-the-badge)
+![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
+
+</div>
 
 ---
 
-## Project Structure
+# 📖 Overview
 
-```
-AI-Agent/
-├── main.py                # Entry point
-├── config.py              # Centralized settings (reads .env)
-├── requirements.txt       # All dependencies
-├── .env.example           # Template — copy to .env
-├── README.md
-│
-├── agent/                 # Core agent logic
-│   ├── __init__.py
-│   ├── base_agent.py      # (Cell 8) Manual keyword agent
-│   └── ai_agent.py        # (Cell 9) LLM-driven agent
-│
-├── llm/                   # LLM abstraction layer
-│   ├── __init__.py
-│   └── llm_wrapper.py     # (Cell 1) Unified Gemini/OpenAI interface
-│
-├── tools/                 # Tool implementations
-│   ├── __init__.py
-│   ├── base_tool.py       # (Cell 2) Abstract Tool interface
-│   ├── weather_tool.py    # (Cell 3)
-│   ├── news_tool.py       # (Cell 4)
-│   ├── calculator_tool.py # (Cell 5)
-│   ├── time_tool.py       # (Cell 6)
-│   ├── tool_registry.py   # (Cell 7)
-│   └── document_tool.py   # (Cell 18) RAG tool
-│
-├── prompts/               # Externalized prompt templates
-│   ├── __init__.py
-│   └── system_prompt.txt  # (Cell 12)
-│
-├── memory/                # Conversation memory
-│   ├── __init__.py
-│   └── conversation_memory.py  # (Cell 11)
-│
-├── api/                   # FastAPI routes
-│   ├── __init__.py
-│   ├── routes.py          # (Cell 14)
-│   └── schemas.py         # Request/Response Pydantic models
-│
-├── utils/                 # Shared utilities
-│   ├── __init__.py
-│   └── logger.py          # (Cell 13)
-│
-├── logs/                  # Runtime log files (git-ignored)
-│   └── agent.log
-│
-├── tests/                 # Test suite
-│   ├── __init__.py
-│   ├── test_cell0.py
-│   └── ...
-│
-└── frontend/              # React UI (Cell 16)
+**Prodigy AI** is a production-style **Agentic AI Platform** that combines modern Large Language Models with Retrieval-Augmented Generation (RAG), conversation memory, intelligent tool calling, and a modern React frontend.
+
+Unlike a basic chatbot, the application can:
+
+* 💬 Maintain conversation context
+* 📄 Chat with uploaded PDF documents
+* 🧠 Retrieve relevant information using ChromaDB
+* 🛠 Call external tools dynamically
+* ⚡ Deliver a modern AI SaaS experience through a responsive React interface
+
+The project is designed with modularity in mind, making it easy to swap LLM providers, extend tools, or deploy to production.
+
+---
+
+# ✨ Features
+
+## 🤖 AI Agent
+
+* Modular Agent Architecture
+* Conversation Memory
+* Multi-turn Conversations
+* Context-Aware Responses
+* System Prompt Support
+
+---
+
+## 📚 Retrieval-Augmented Generation (RAG)
+
+* PDF Upload
+* Automatic Chunking
+* Embedding Generation
+* ChromaDB Vector Database
+* Semantic Search
+* Context Injection into LLM
+
+---
+
+## 🛠 Intelligent Tool Calling
+
+Current tools include:
+
+* 🧮 Calculator
+* 🌦 Weather
+* 📰 Latest News
+* 🕒 Current Time
+
+The AI automatically decides when to invoke a tool before responding.
+
+---
+
+## 💻 Modern Frontend
+
+* React + Vite
+* Tailwind CSS
+* shadcn/ui
+* Framer Motion Animations
+* Responsive Design
+* Markdown Rendering
+* Syntax Highlighting
+* Upload Modal
+* Toast Notifications
+* Conversation History
+
+---
+
+## ⚙ Backend
+
+* FastAPI
+* REST APIs
+* Modular Architecture
+* Dependency Injection
+* Environment Variable Configuration
+
+---
+
+# 🏗 System Architecture
+
+```text
+                     React + Vite Frontend
+                               │
+                               ▼
+                         Axios API Client
+                               │
+                               ▼
+                       FastAPI REST Backend
+                               │
+                               ▼
+                          Agent Controller
+                               │
+        ┌──────────────────────┼──────────────────────┐
+        ▼                      ▼                      ▼
+ Conversation Memory      Tool Calling          RAG Manager
+        │                      │                      │
+        ▼                      ▼                      ▼
+ Gemini 2.5 Flash      Weather / News /       ChromaDB Vector
+                       Calculator / Time         Database
 ```
 
 ---
 
-## Quick Start
+# 🛠 Tech Stack
+
+## Frontend
+
+* React
+* Vite
+* Tailwind CSS
+* shadcn/ui
+* Framer Motion
+* Axios
+* React Markdown
+* Lucide React
+
+## Backend
+
+* Python
+* FastAPI
+* Uvicorn
+* Google Gemini API
+* ChromaDB
+* Sentence Transformers
+* PyPDF
+* python-dotenv
+
+---
+
+# 📂 Project Structure
+
+```text
+Production_AI_Agent/
+
+├── agent/
+│   ├── agent.py
+│   └── router.py
+│
+├── api/
+│   ├── app.py
+│   ├── chat.py
+│   ├── upload.py
+│   └── dependencies.py
+│
+├── frontend/
+│   ├── src/
+│   ├── public/
+│   └── package.json
+│
+├── llm/
+├── memory/
+├── rag/
+├── tools/
+├── uploads/
+├── chroma_db/
+├── requirements.txt
+└── README.md
+```
+
+---
+
+# 📡 API Endpoints
+
+## Chat
+
+```http
+POST /chat
+```
+
+Request
+
+```json
+{
+  "message": "Explain Retrieval-Augmented Generation"
+}
+```
+
+---
+
+## Upload PDF
+
+```http
+POST /upload
+```
+
+Content-Type
+
+```text
+multipart/form-data
+```
+
+Field
+
+```text
+file
+```
+
+---
+
+## Health Check
+
+```http
+GET /health
+```
+
+---
+
+# 🚀 Getting Started
+
+## Clone Repository
 
 ```bash
-# 1. Clone the repo
-git clone <repo-url>
-cd AI-Agent
+git clone https://github.com/mandar-birewar/agentic-rag-platform.git
 
-# 2. Create virtual environment
-python -m venv venv
-source venv/bin/activate          # Windows: venv\Scripts\activate
-
-# 3. Install dependencies
-pip install -r requirements.txt
-
-# 4. Configure environment
-cp .env.example .env
-# Fill in API keys in .env
-
-# 5. Run the app
-python main.py
-
-# 6. Start the API server (Cell 14+)
-uvicorn api.routes:app --reload --host 0.0.0.0 --port 8000
+cd agentic-rag-platform
 ```
 
 ---
 
-## Tech Stack
+## Backend Setup
 
-| Layer | Technology |
-|-------|-----------|
-| Language | Python 3.11+ |
-| LLM | Google Gemini 1.5 / OpenAI GPT-4o |
-| Agent Framework | LangGraph (Cell 9+) |
-| API | FastAPI + Uvicorn |
-| Vector DB | ChromaDB |
-| Embeddings | sentence-transformers |
-| Memory | In-memory + Redis (optional) |
-| Containerization | Docker + Docker Compose |
-| Frontend | React + Tailwind |
-| Testing | pytest |
+```bash
+python -m venv venv
 
----
+# Windows
+venv\Scripts\activate
 
-## Cells (Build Milestones)
+pip install -r requirements.txt
+```
 
-| Cell | Feature | Status |
-|------|---------|--------|
-| 0 | Project Setup | ✅ Done |
-| 1 | LLM Wrapper | ⬜ |
-| 2 | Tool Interface | ⬜ |
-| 3 | Weather Tool | ⬜ |
-| 4 | News Tool | ⬜ |
-| 5 | Calculator Tool | ⬜ |
-| 6 | Time Tool | ⬜ |
-| 7 | Tool Registry | ⬜ |
-| 8 | Manual Agent | ⬜ |
-| 9 | AI Agent (LLM Routing) | ⬜ |
-| 10 | Multi-Tool Calls | ⬜ |
-| 11 | Memory | ⬜ |
-| 12 | Prompt Management | ⬜ |
-| 13 | Logging | ⬜ |
-| 14 | FastAPI Backend | ⬜ |
-| 15 | Streaming | ⬜ |
-| 16 | React Frontend | ⬜ |
-| 17 | Vector DB / RAG | ⬜ |
-| 18 | Document Tool | ⬜ |
-| 19 | Reflection | ⬜ |
-| 20 | Planning Agent | ⬜ |
-| 21 | Multi-Agent System | ⬜ |
-| 22 | Docker | ⬜ |
-| 23 | Deployment | ⬜ |
-| 24 | Evaluation | ⬜ |
-| 25 | Final Polish | ⬜ |
+Create a `.env` file
+
+```env
+GEMINI_API_KEY=YOUR_API_KEY
+```
+
+Run FastAPI
+
+```bash
+uvicorn api.app:app --reload
+```
+
+Backend
+
+```
+http://127.0.0.1:8000
+```
+
+Swagger Docs
+
+```
+http://127.0.0.1:8000/docs
+```
 
 ---
 
-## API Keys Needed
+## Frontend Setup
 
-| Service | Used For | Free Tier |
-|---------|----------|-----------|
-| [Google AI Studio](https://aistudio.google.com) | Gemini LLM | ✅ Yes |
-| [OpenWeatherMap](https://openweathermap.org/api) | Weather Tool | ✅ Yes |
-| [NewsAPI](https://newsapi.org) | News Tool | ✅ Yes |
-| [OpenAI](https://platform.openai.com) | Optional fallback LLM | ⚠️ Paid |
+```bash
+cd frontend
+
+npm install
+
+npm run dev
+```
+
+Frontend
+
+```
+http://localhost:5173
+```
+
+---
+
+# 🔮 Roadmap
+
+* Streaming Responses
+* Multi-LLM Support (Gemini, Groq, OpenRouter)
+* Authentication
+* Persistent Chat Sessions
+* Docker Deployment
+* Cloud Deployment
+* Source Citations for RAG
+* Voice Interaction
+* Chat Export
+* Conversation Search
+
+---
+
+# 📸 Screenshots
+
+> Screenshots will be added after deployment.
+
+---
+
+# 🌐 Live Demo
+
+> Coming Soon
+
+---
+
+# 👨‍💻 Author
+
+**Mandar Birewar**
+
+* GitHub: https://github.com/mandar-birewar
+* LinkedIn: *(Add your LinkedIn profile here)*
+
+---
+
+# 📄 License
+
+This project is licensed under the MIT License.
